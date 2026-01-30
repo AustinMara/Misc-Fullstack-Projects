@@ -1,6 +1,8 @@
 import {type Container, createRoot} from "react-dom/client";
 import Calculator from "./Calculator.tsx";
 import ToDo from "./ToDo.tsx";
+import {CatWeather} from "./CatWeather.tsx";
+
 
 const root = document.getElementById('root');
 if(!root){
@@ -9,7 +11,6 @@ if(!root){
 createRoot(root).render(
     <>
         <ToDo/>
-
+        <CatWeather/>
     </>
-
 );
