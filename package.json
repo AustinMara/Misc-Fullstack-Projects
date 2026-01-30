@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview-alt": "vite preview /index2.html"
   },
   "devDependencies": {
+    "@types/react-dom": "^19.2.3",
     "daisyui": "^5.5.14",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
@@ -17,6 +19,8 @@
     "@tailwindcss/vite": "^4.1.18",
     "math-expression-evaluator": "^2.0.7",
     "node": "^25.5.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "tailwindcss": "^4.1.18"
   }
 }
