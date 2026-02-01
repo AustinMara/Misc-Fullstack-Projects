@@ -16,9 +16,9 @@ export function ListItem({id = 0}: ListItemProps) {
 
 
     return (
-        <li className={'list flex flex-row w-full align-middle gap-2 h-min'} onDoubleClick={() => {
+        <li className={'list flex flex-row w-full align-middle gap-2 h-min '} onDoubleClick={() => {
         }}>
-            <input type={'checkbox'} className={'checkbox w-1/12 h-auto align-middle aspect-square'} onClick={() => {
+            <input type={'checkbox'} className={'checkbox w-1/12 h-auto align-middle bg-base-300 aspect-square outline-2 outline-accent-content'} onBlur = {() => {storeData(key, {checked, itemText})}} onClick={() => {
                 setChecked(!checked)
             }}>
 
@@ -33,8 +33,9 @@ export function ListItem({id = 0}: ListItemProps) {
                     input-primary 
                     text-lg 
                     outline-2 
-                    outline-base-300 
-                    rounded-xl 
+                    outline-accent-content 
+                    rounded
+                    bg-base-300 
                     pl-1 
                     w-11/12 
                     focus:outline-accent
@@ -43,7 +44,7 @@ export function ListItem({id = 0}: ListItemProps) {
                 `}>
 
             </input>
-            {id}
+
         </li>
 
     )

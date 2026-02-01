@@ -12,17 +12,17 @@ function ToDo() {
 
     return (
         <>
-            <div className={' flex justify-center items-center mb-32 '} data-theme={"synthwave"}>
+            <div className={' flex justify-center items-center mb-32 '} data-theme={"retro"}>
                 <div
-                    className={'card outline-base-content outline-1 w-1/2 h-fit flex flex-col items-center justify-center bg-base-200'}>
-                    <h1 className={'card-title self-center text-base-content text-2xl font-bold'}>To-Do</h1>
+                    className={'card bg-base-200 outline-accent outline-3 w-1/2 h-fit flex flex-col items-center justify-center '}>
+                    <h1 className={'card-title font-serif self-center text-base-content text-3xl font-bold'}>To-Do</h1>
                     <ul id='list' className={'list w-full card-body grid grid-rows-2 '}>
 
                         {items}
 
                         <li className={'list flex w-full items-center'}>
-                            <button className={'btn btn-primary text-3xl text-bold items-center justify-center'}
-                                    type={'button'} onClick={() => setItems([...items, <ListItem id = {items.length}/>])}> +
+                            <button className={'btn btn-accent text-3xl rounded-2xl text-bold items-center justify-center align-middle'}
+                                    type={'button'} onClick={() => setItems([...items, <ListItem id = {items.length}/>])}>+
                             </button>
 
                         </li>

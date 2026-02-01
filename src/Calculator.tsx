@@ -41,7 +41,7 @@ function handleClick(value:(number | Operations)){
             //result.push(value);
             break;
     }
-    if(typeof value === 'string' && typeof result.at(-1) === 'string'){
+    if(value!= '-' && typeof value === 'string' && typeof result.at(-1) === 'string'){
         result.pop();
     }
 
