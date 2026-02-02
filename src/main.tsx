@@ -1,7 +1,4 @@
-
-
-import setupCalculator from './Calculator.tsx';
-import {createRoot} from 'react-dom/client';
+import setupCalculator from "./Components/Calculator.tsx";
+import { createRoot } from "react-dom/client";
 
 setupCalculator();
-

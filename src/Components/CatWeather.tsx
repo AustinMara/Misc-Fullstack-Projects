@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import WeatherDisplay from "./WeatherDisplay";
 import { fetchWeatherApi } from "openmeteo";
+import weatherCodes from "../data/weather_codes.json";
 
 const stillCat = "https://cataas.com/cat?type=square";
 const gifCat = "https://cataas.com/cat/gif?type=square";
@@ -8,7 +9,6 @@ const gifCat = "https://cataas.com/cat/gif?type=square";
 let cityName = "Seattle";
 const weatherAPI = `https://api.open-meteo.com/v1/forecast`;
 const geoAPI = `https://api.geoapify.com/v1/ipinfo?&apiKey=31c3a86e91e648569a0403f635df3fc6`;
-const weatherCodes = JSON.parse('./data/weather_codes.json')
 
 //const openWeather =
 //let response = '';
@@ -40,17 +40,17 @@ async function fetchData(
                     (Number(current.time()) + utcOffsetSeconds) * 1000,
                 ),
                 temperature_2m: current.variables(0)!.value(),
-                precipitation: current.variables(1)!.value(),
-                rain: current.variables(2)!.value(),
-                wind_speed_10m: current.variables(3)!.value(),
-                is_day: current.variables(4)!.value(),
-                showers: current.variables(5)!.value(),
-                snowfall: current.variables(6)!.value(),
-                cloud_cover: current.variables(7)!.value(),
-                weather_code: current.variables(8)!.value()
+                weather_code: current.variables(1)!.value(),
+                is_day: current.variables(2)!.value(),
+                cloud_cover: current.variables(3)!.value(),
+                wind_speed_10m: current.variables(4)!.value(),
+                precipitation: current.variables(5)!.value(),
+                wind_direction_10m: current.variables(6)!.value(),
+                relative_humidity_2m: current.variables(7)!.value(),
+                apparent_temperature: current.variables(8)!.value(),
             },
         };
-        
+        console.log(latitude, longitude);
         return weatherData;
     }
 
@@ -91,8 +91,6 @@ const cToF = (celsiusStr: string) => {
         : `${Math.round((celsius * 9) / 5 + 32)} °F`;
 };
 
-
-
 export function CatWeather() {
     const [weather, setWeather] = useState<any>(null);
     const [location, setLocation] = useState<any>(null);
@@ -121,17 +119,15 @@ export function CatWeather() {
         longitude: longitude,
         current: [
             "temperature_2m",
-            "precipitation",
-            "rain",
-            "wind_speed_10m",
+            "weather_code",
             "is_day",
-            "showers",
-            "snowfall",
             "cloud_cover",
-            "weather_code"
+            "wind_speed_10m",
+            "precipitation",
+            "wind_direction_10m",
+            "relative_humidity_2m",
+            "apparent_temperature",
         ],
-
-        forecast_days: 3,
         wind_speed_unit: "mph",
         temperature_unit: "fahrenheit",
         precipitation_unit: "inch",
@@ -186,15 +182,16 @@ export function CatWeather() {
                     className={
                         "card-body items-center justify-center w-full font-serif text-lg"
                     }>
-
+                    <h1 className={""}>{weather ? "good" : "Loading..."}</h1>
                     <h1 className={""}>
-                        {weather ? weather.description : "Loading..."}
+                        {weather
+                            ? `${Math.floor(weather.current.temperature_2m)} °F`
+                            : "Loading..."}
                     </h1>
                     <h1 className={""}>
-                        {weather ? `${Math.floor(weather.current.temperature_2m)} °F` : "Loading..."}
-                    </h1>
-                    <h1 className={""}>
-                        {weather ? weather.wind : "Loading..."}
+                        {weather
+                            ? `${Math.round(weather.current.wind_speed_10m * 100) / 100} mph`
+                            : "Loading..."}
                     </h1>
                 </div>
             </section>

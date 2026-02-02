@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {ListItem} from "./ListItem.tsx";
+import {ListItem} from "./ListItem";
 
 export const [text, setText] = ('')
 
