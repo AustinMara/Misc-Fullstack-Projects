@@ -1,20 +1,59 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import WeatherDisplay from "./WeatherDisplay";
+import { fetchWeatherApi } from "openmeteo";
 
-
-const stillCat = 'https://cataas.com/cat?type=square';
-const gifCat = 'https://cataas.com/cat/gif?type=square';
-
-
+const stillCat = "https://cataas.com/cat?type=square";
+const gifCat = "https://cataas.com/cat/gif?type=square";
 
 let cityName = "Seattle";
-const weatherAPI = `http://goweather.xyz/weather/${cityName}`;
+const weatherAPI = `https://api.open-meteo.com/v1/forecast`;
 const geoAPI = `https://api.geoapify.com/v1/ipinfo?&apiKey=31c3a86e91e648569a0403f635df3fc6`;
+const weatherCodes = JSON.parse('./data/weather_codes.json')
+
 //const openWeather =
 //let response = '';
 
+async function fetchData(
+    api?: string,
+    url?: string,
+    params?: {},
+    retries = 3,
+    delay = 1000,
+) {
+    if (!api) {
+        const responses = await fetchWeatherApi(weatherAPI, params);
+        const response = responses[0];
 
+        const current = response.current();
+        if (current == null) {
+            console.error(`Current is null`);
+            return;
+        }
 
-async function fetchData(api: string, retries = 3, delay = 1000) {
+        const latitude = response.latitude();
+        const longitude = response.longitude();
+        const elevation = response.elevation();
+        const utcOffsetSeconds = response.utcOffsetSeconds();
+        const weatherData = {
+            current: {
+                time: new Date(
+                    (Number(current.time()) + utcOffsetSeconds) * 1000,
+                ),
+                temperature_2m: current.variables(0)!.value(),
+                precipitation: current.variables(1)!.value(),
+                rain: current.variables(2)!.value(),
+                wind_speed_10m: current.variables(3)!.value(),
+                is_day: current.variables(4)!.value(),
+                showers: current.variables(5)!.value(),
+                snowfall: current.variables(6)!.value(),
+                cloud_cover: current.variables(7)!.value(),
+                weather_code: current.variables(8)!.value()
+            },
+        };
+        
+        return weatherData;
+    }
+
     try {
         // Await the fetch call to get the Response object
         const response = await fetch(api);
@@ -33,25 +72,28 @@ async function fetchData(api: string, retries = 3, delay = 1000) {
         return data;
     } catch (error) {
         if (retries > 0) {
-            await new Promise(resolve => setTimeout(resolve, delay));
-            return fetchData(api, retries - 1, delay);
+            await new Promise((resolve) => setTimeout(resolve, delay));
+            return fetchData(api, "", {}, retries - 1, delay);
         } else {
             // Handle any errors during the fetch or parsing
-            console.error('Error fetching or parsing data:', error);
+            console.error("Error fetching or parsing data:", error);
             return null;
         }
     }
-
 }
 
 // Call the async function
 
 const cToF = (celsiusStr: string) => {
     const celsius = parseInt(celsiusStr);
-    return isNaN(celsius) ? celsiusStr : `${Math.round((celsius * 9 / 5) + 32)} °F`;
+    return isNaN(celsius)
+        ? celsiusStr
+        : `${Math.round((celsius * 9) / 5 + 32)} °F`;
 };
 
-export function CatWeather(){
+
+
+export function CatWeather() {
     const [weather, setWeather] = useState<any>(null);
     const [location, setLocation] = useState<any>(null);
     const [city, setCity] = useState<string | null>(null);
@@ -60,56 +102,102 @@ export function CatWeather(){
     const [openWeather, setOpenWeather] = useState<any>(false);
 
     useEffect(() => {
-        fetchData(geoAPI).then(data => {
+        fetchData(geoAPI).then((data) => {
             if (data?.city?.name) {
                 setCity(data.city.name);
             }
-            if (data?.location?.latitude){
+            if (data?.location?.latitude) {
                 setLatitude(data.location.latitude);
             }
 
-            if (data?.location?.longitude){
+            if (data?.location?.longitude) {
                 setLongitude(data.location.longitude);
             }
         });
     }, []);
 
+    const weatherParams = {
+        latitude: latitude,
+        longitude: longitude,
+        current: [
+            "temperature_2m",
+            "precipitation",
+            "rain",
+            "wind_speed_10m",
+            "is_day",
+            "showers",
+            "snowfall",
+            "cloud_cover",
+            "weather_code"
+        ],
 
+        forecast_days: 3,
+        wind_speed_unit: "mph",
+        temperature_unit: "fahrenheit",
+        precipitation_unit: "inch",
+    };
 
     useEffect(() => {
         if (city) {
-            fetchData(`http://goweather.xyz/weather/${city}`).then(data => setWeather(data)).catch(error => console.log(error));
+            fetchData(undefined, undefined, weatherParams)
+                .then((data) => setWeather(data))
+                .catch((error) => console.log(error));
         }
     }, [city]);
 
-    useEffect(() => {
-        if (latitude && longitude) {
-            fetchData(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,hourly,daily,alerts&units=imperial&appid=fdfb255af4db56123e32a9ca42e57704`).then(data => setOpenWeather(data));
-        }
-    }, [latitude, longitude]);
+    // useEffect(() => {
+    //     if (latitude && longitude) {
+    //         fetchWeatherApi(
 
-    console.log(openWeather);
+    //         )
+    //             .then((data) => setOpenWeather(data))
+    //             .catch((error) => console.log(error));
+    //     }
+    // }, [latitude, longitude]);
 
-    const [image, setImage] = useState("https://cataas.com/cat?type=square")
-    return(
+    console.log(weather);
+
+    const [image, setImage] = useState("https://cataas.com/cat?type=square");
+    return (
         <div
-            data-theme={'retro'}
-            className={'flex w-screen h-screen items-center justify-center bg-base-100 align-middle'}
-        >
-            <section className={"card h-auto w-full max-w-xl items-center justify-center outline-accent outline-3 p-4 overflow-hidden bg-base-200"}>
-                <p className = "font-serif  card-title align-middle text-8xl mb-2" >Hello, {city}</p>
+            data-theme={"retro"}
+            className={
+                "flex w-screen h-screen items-center justify-center bg-base-100 align-middle overflow-x-hidden"
+            }>
+            <section
+                className={
+                    "card h-auto w-full max-w-xl items-center justify-center outline-accent outline-3 p-4 overflow-hidden bg-base-200"
+                }>
+                <p className='font-serif  card-title align-middle text-8xl mb-2'>
+                    Hello, {city}
+                </p>
                 <figure className={"w-full"}>
-                    <img src={image} className={"w-2/3 outline-accent-content outline-2 aspect-square rounded-xl object-contain mt-1"} onClick={() => setImage(image == stillCat ? gifCat : stillCat)} alt={"cat"}></img>
+                    <img
+                        src={image}
+                        className={
+                            "w-2/3 outline-accent-content outline-2 aspect-square rounded-xl object-contain mt-1"
+                        }
+                        onClick={() =>
+                            setImage(image == stillCat ? gifCat : stillCat)
+                        }
+                        alt={"cat"}></img>
                 </figure>
-                <div className={'card-body items-center justify-center w-full font-serif text-lg'}>
-                    <h1 className={''}>{weather ? weather.description : "Loading..."}</h1>
-                    <h1 className={''}>{weather ? cToF(weather.temperature) : "Loading..."}</h1>
-                    <h1 className={''}>{weather ? weather.wind : "Loading..."}</h1>
+                <div
+                    className={
+                        "card-body items-center justify-center w-full font-serif text-lg"
+                    }>
+
+                    <h1 className={""}>
+                        {weather ? weather.description : "Loading..."}
+                    </h1>
+                    <h1 className={""}>
+                        {weather ? `${Math.floor(weather.current.temperature_2m)} °F` : "Loading..."}
+                    </h1>
+                    <h1 className={""}>
+                        {weather ? weather.wind : "Loading..."}
+                    </h1>
                 </div>
-
-
             </section>
-
         </div>
-    )
+    );
 }
