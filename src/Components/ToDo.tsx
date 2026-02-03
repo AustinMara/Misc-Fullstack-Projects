@@ -12,7 +12,7 @@ function ToDo() {
 
     return (
         <>
-            <div className={' flex justify-center items-center mb-32 '} data-theme={"retro"}>
+            <div className={' flex justify-center items-center mb-32 '}>
                 <div
                     className={'card bg-base-200 outline-accent outline-3 w-1/2 h-fit flex flex-col items-center justify-center '}>
                     <h1 className={'card-title font-serif self-center text-base-content text-3xl font-bold'}>To-Do</h1>
