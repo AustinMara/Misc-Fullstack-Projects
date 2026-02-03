@@ -15,7 +15,6 @@ const geoAPI = `https://api.geoapify.com/v1/ipinfo?&apiKey=31c3a86e91e648569a040
 
 async function fetchData(
     api?: string,
-    url?: string,
     params?: {},
     retries = 3,
     delay = 1000,
@@ -73,7 +72,7 @@ async function fetchData(
     } catch (error) {
         if (retries > 0) {
             await new Promise((resolve) => setTimeout(resolve, delay));
-            return fetchData(api, "", {}, retries - 1, delay);
+            return fetchData(api, {}, retries - 1, delay);
         } else {
             // Handle any errors during the fetch or parsing
             console.error("Error fetching or parsing data:", error);
@@ -135,7 +134,7 @@ export function CatWeather() {
 
     useEffect(() => {
         if (city) {
-            fetchData(undefined, undefined, weatherParams)
+            fetchData(undefined, weatherParams)
                 .then((data) => setWeather(data))
                 .catch((error) => console.log(error));
         }
@@ -154,11 +153,18 @@ export function CatWeather() {
     console.log(weather);
 
     const [image, setImage] = useState("https://cataas.com/cat?type=square");
+
+    const weatherCode = weather?.current?.weather_code;
+    const isDay = weather?.current?.is_day;
+    const weatherInfo = (weatherCode !== undefined && isDay !== undefined)
+        ? (weatherCodes as any)[String(weatherCode)]?.[isDay === 1 ? "day" : "night"]
+        : null;
+
     return (
         <div
-            data-theme={"retro"}
+
             className={
-                "flex w-screen h-screen items-center justify-center bg-base-100 align-middle overflow-x-hidden"
+                "flex w-screen h-screen items-center justify-center  align-middle overflow-x-hidden"
             }>
             <section
                 className={
@@ -182,7 +188,7 @@ export function CatWeather() {
                     className={
                         "card-body items-center justify-center w-full font-serif text-lg"
                     }>
-                    <h1 className={""}>{weather ? "good" : "Loading..."}</h1>
+                    <h1 className={""}>{weatherInfo ? weatherInfo.description : "Loading..."}</h1>
                     <h1 className={""}>
                         {weather
                             ? `${Math.floor(weather.current.temperature_2m)} °F`
