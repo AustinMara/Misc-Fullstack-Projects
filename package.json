@@ -10,6 +10,7 @@
     "preview-alt": "vite preview /index2.html"
   },
   "devDependencies": {
+    "@types/node": "^25.2.1",
     "@types/react-dom": "^19.2.3",
     "daisyui": "^5.5.14",
     "typescript": "~5.9.3",
@@ -18,9 +19,10 @@
   "dependencies": {
     "@dotenvx/dotenvx": "^1.52.0",
     "@tailwindcss/vite": "^4.1.18",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
     "math-expression-evaluator": "^2.0.7",
-    "node": "^25.5.0",
+    "node": "^25.6.0",
     "openmeteo": "^1.2.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

@@ -3,12 +3,14 @@ import WeatherDisplay from "./WeatherDisplay";
 import { fetchWeatherApi } from "openmeteo";
 import weatherCodes from "../data/weather_codes.json";
 
+
+
 const stillCat = "https://cataas.com/cat?type=square";
 const gifCat = "https://cataas.com/cat/gif?type=square";
 
 let cityName = "Seattle";
 const weatherAPI = `https://api.open-meteo.com/v1/forecast`;
-const geoAPI = `https://api.geoapify.com/v1/ipinfo?&apiKey=31c3a86e91e648569a0403f635df3fc6`;
+const geoAPI = `${import.meta.env.VITE_GEO_API_URL}`;
 
 //const openWeather =
 //let response = '';
