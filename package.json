@@ -1,33 +1,38 @@
 {
-  "name": "calculator2",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "preview-alt": "vite preview /index2.html"
-  },
-  "devDependencies": {
-    "@types/node": "^25.2.1",
-    "@types/react-dom": "^19.2.3",
-    "daisyui": "^5.5.14",
-    "typescript": "~5.9.3",
-    "vite": "^7.2.4"
-  },
-  "dependencies": {
-    "@dotenvx/dotenvx": "^1.52.0",
-    "@tailwindcss/vite": "^4.1.18",
-    "dotenv": "^17.2.4",
-    "express": "^5.2.1",
-    "math-expression-evaluator": "^2.0.7",
-    "node": "^25.6.0",
-    "openmeteo": "^1.2.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "tailwindcss": "^4.1.18",
-    "webpack": "^5.105.0",
-    "webpack-cli": "^6.0.1"
-  }
+    "name": "calculator2",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "homepage": "https://github.com/AustinMara/Misc-Fullstack-Projects",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "preview-alt": "vite preview /index2.html",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
+    },
+    "devDependencies": {
+        "@types/node": "^25.2.1",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^5.1.4",
+        "daisyui": "^5.5.14",
+        "gh-pages": "^6.3.0",
+        "typescript": "~5.9.3",
+        "vite": "^7.2.4"
+    },
+    "dependencies": {
+        "@dotenvx/dotenvx": "^1.52.0",
+        "@tailwindcss/vite": "^4.1.18",
+        "dotenv": "^17.2.4",
+        "express": "^5.2.1",
+        "math-expression-evaluator": "^2.0.7",
+        "node": "^25.6.0",
+        "openmeteo": "^1.2.3",
+        "react": "^19.2.4",
+        "react-dom": "^19.2.4",
+        "tailwindcss": "^4.1.18",
+        "webpack": "^5.105.0",
+        "webpack-cli": "^6.0.1"
+    }
 }
