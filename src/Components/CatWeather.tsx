@@ -153,8 +153,9 @@ export function CatWeather() {
     // }, [latitude, longitude]);
 
     console.log(weather);
-
+    
     const [image, setImage] = useState("https://cataas.com/cat?type=square");
+    const [preimage, setPreimage] = useState("https://catass.com/cat?types=square");
 
     const weatherCode = weather?.current?.weather_code;
     const isDay = weather?.current?.is_day;
@@ -166,23 +167,24 @@ export function CatWeather() {
         <div
 
             className={
-                "flex w-screen h-screen items-center justify-center  align-middle overflow-x-hidden"
+                "flex  h-screen items-center justify-center  align-middle overflow-x-hidden "
             }>
             <section
                 className={
-                    "card h-auto w-full max-w-xl items-center justify-center outline-accent outline-3 p-4 overflow-hidden bg-base-200"
+                    "card h-auto w-full max-w-xl items-center justify-center outline-accent outline-3 p-4 overflow-hidden bg-base-200 inset-shadow-accent-content inset-shadow-sm ring-accent-content ring-2"
                 }>
-                <p className='font-serif  card-title align-middle text-8xl mb-2'>
+                <p className='font-serif  card-title align-middle text-8xl mb-2 text-shadow-accent antialiased'>
                     Hello, {city}
                 </p>
                 <figure className={"w-full"}>
                     <img
                         src={image}
                         className={
-                            "w-2/3 outline-accent-content outline-2 aspect-square rounded-xl object-contain mt-1"
+                            "w-2/3 outline-accent-content outline-2 aspect-square rounded-xl object-contain mt-1 inset-shadow-accent-content inset-shadow-sm ring-accent-content ring-2"
                         }
                         onClick={() =>
-                            setImage(image == stillCat ? gifCat : stillCat)
+
+                            setImage('https://cataas.com/cat?type=square')
                         }
                         alt={"cat"}></img>
                 </figure>

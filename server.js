@@ -15,7 +15,7 @@ app.get("/location", async (req, res) => {
         .then((data) => res.json(data))
         .catch((error) => console.error(error));
 
-
+    
 });
 
 app.listen(PORT, () => {

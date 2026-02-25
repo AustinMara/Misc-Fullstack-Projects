@@ -5,8 +5,8 @@ import { Children} from "react";
 export default function App({ children }){
     return(
         <>
-        <div data-theme={"retro"} className={"ComponentList min-h-screen bg-base-100"}>
-            <div className={""}>
+        <div data-theme={"retro"} className={"ComponentList min-h-screen bg-base "}>
+            <div className={"grid-rows-subgrid"}>
                 {Children.map(children, (child) =>
                     <>
                         {child}
