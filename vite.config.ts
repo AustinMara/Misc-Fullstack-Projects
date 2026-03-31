@@ -7,7 +7,7 @@ export default defineConfig({
         tailwindcss(),
         react()
     ],
-    base:'/',
+    base: '/Misc-Fullstack-Projects/',
     server: {
        watch: {
          usePolling: true, // Enable polling for file changes
