@@ -25,10 +25,10 @@ function AddStudent({ onAdd }: Props) {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Student name..."
-                className="input input-bordered flex-1 text-xl"
+                className="input input-bordered flex-1 text-base sm:text-xl"
                 autoFocus
             />
-            <button type="submit" className="btn btn-primary text-xl px-8">
+            <button type="submit" className="btn btn-primary text-base sm:text-xl px-4 sm:px-8">
                 + Add
             </button>
         </form>
