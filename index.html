@@ -1,48 +1,10 @@
 <!doctype html>
-<html data-theme="retro" lang="en">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
-
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Austin's Fun Stuff</title>
-        <link href="/src/style.css" rel="stylesheet" />
     </head>
-    <body class="overflow-x-hidden">
-        <main id="app" class="h-screen flex items-center justify-center">
-            <div
-                class="calculator bg-base-200 card flex-col flex outline-2 outline-accent">
-                <h1
-                    class="card-title text-base-content text-2xl justify-center text-center align-middle">
-                    Calculator
-                </h1>
-
-                <div
-                    id="calculator-container"
-                    class="card-body flex-col-reverse">
-                    <div class="card-body">
-                        <h2
-                            class="place-self-center-safe text-base-content outline-accent outline-2 rounded-2xl w-full text-center"
-                            id="display">
-                            0
-                        </h2>
-                        <div class="flex flex-row-reverse gap-1">
-                            <section
-                                id="operator-container"
-                                class="w-fit grid grid-rows-4 grid-cols-2 gap-1"></section>
-                            <section
-                                id="digit-container"
-                                class="grid grid-cols-3 grid-rows-4 gap-1"></section>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        <script type="module" src="/src/main.tsx"></script>
-    </body>
-</html>
-
-<!doctype html>
-<html lang="en">
     <body>
         <div id="root"></div>
         <script type="module" src="/src/main_react.tsx"></script>
