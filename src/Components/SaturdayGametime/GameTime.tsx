@@ -20,10 +20,26 @@ function getTimeLeft(student: Student): number {
 }
 
 function GameTime() {
-    const [students, setStudents] = useState<Student[]>([]);
-    const [waitlist, setWaitlist] = useState<string[]>([]);
+    const [students, setStudents] = useState<Student[]>(() => {
+        try {
+            return JSON.parse(localStorage.getItem('gametime-students') ?? '[]');
+        } catch { return []; }
+    });
+    const [waitlist, setWaitlist] = useState<string[]>(() => {
+        try {
+            return JSON.parse(localStorage.getItem('gametime-waitlist') ?? '[]');
+        } catch { return []; }
+    });
     const [, setTick] = useState(0);
     const [clock, setClock] = useState(new Date());
+
+    useEffect(() => {
+        localStorage.setItem('gametime-students', JSON.stringify(students));
+    }, [students]);
+
+    useEffect(() => {
+        localStorage.setItem('gametime-waitlist', JSON.stringify(waitlist));
+    }, [waitlist]);
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -62,6 +78,13 @@ function GameTime() {
         }));
     };
 
+    const setStudentTime = (id: string, ms: number) => {
+        setStudents(prev => prev.map(s => {
+            if (s.id !== id) return s;
+            return { ...s, timeLeftMs: ms, endTime: Date.now() + ms, isPaused: false };
+        }));
+    };
+
     const addToWaitlist = (name: string) => setWaitlist(prev => [...prev, name]);
     const removeFromWaitlist = (index: number) => setWaitlist(prev => prev.filter((_, i) => i !== index));
     const activateFromWaitlist = (name: string, index: number) => {
@@ -77,27 +100,26 @@ function GameTime() {
 
             {/* Header */}
             <div className="flex items-center justify-between">
-                <h1 className="text-4xl font-bold">Saturday Game Time</h1>
-                <div className="text-3xl font-mono font-bold tabular-nums">
-                    {clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold">Saturday Game Time</h1>
+                <div className="text-xl sm:text-2xl font-mono font-bold tabular-nums">
+                    {clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
             </div>
 
-            <div className="flex gap-4 items-start">
+            <AddStudent onAdd={addStudent} />
+
+            <div className="flex flex-col lg:flex-row gap-4 items-start">
 
                 {/* Main area */}
-                <div className="flex flex-col gap-4 flex-1 min-w-0">
-                    <AddStudent onAdd={addStudent} />
-
+                <div className="flex flex-col gap-4 flex-1 min-w-0 w-full">
                     {activeStudents.length === 0 && timesUpStudents.length === 0 && (
-                        <div className="text-center text-base-content/40 text-2xl py-16">
+                        <div className="text-center text-base-content/40 text-xl py-16">
                             No students yet — add one above!
                         </div>
                     )}
 
-                    {/* Active student grid */}
                     {activeStudents.length > 0 && (
-                        <div className="grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3">
                             {activeStudents.map(student => (
                                 <StudentCard
                                     key={student.id}
@@ -106,15 +128,15 @@ function GameTime() {
                                     onPause={() => pauseStudent(student.id)}
                                     onResume={() => resumeStudent(student.id)}
                                     onRemove={() => removeStudent(student.id)}
+                                    onSetTime={(ms) => setStudentTime(student.id, ms)}
                                 />
                             ))}
                         </div>
                     )}
-
                 </div>
 
-                {/* Sidebar */}
-                <div className="w-72 shrink-0 flex flex-col gap-4">
+                {/* Sidebar — stacks below on mobile, fixed width column on large screens */}
+                <div className="w-full lg:w-72 lg:shrink-0 flex flex-col gap-4">
                     <TimesUp students={timesUpStudents} onRemove={removeStudent} />
                     <Waitlist waitlist={waitlist} onAdd={addToWaitlist} onRemove={removeFromWaitlist} onActivate={activateFromWaitlist} />
                 </div>

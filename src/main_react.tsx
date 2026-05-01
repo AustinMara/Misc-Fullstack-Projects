@@ -1,10 +1,11 @@
 import './style.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import { HashRouter, Route, Routes, Link } from 'react-router-dom';
 import ToDo from "./Components/ToDo.tsx";
 import { CatWeather } from "./Components/CatWeather.tsx";
 import Points from "./Components/Points/Points.tsx";
+// @ts-ignore
 import CanvasGame from "./Components/Game/CanvasGame.jsx";
 import GameTime from "./Components/SaturdayGametime/GameTime.tsx";
 
@@ -46,7 +47,7 @@ const root = ReactDOM.createRoot(document.getElementById('root')!);
 
 root.render(
     <React.StrictMode>
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
                 <Route path='/' element={<Home />} />
                 <Route path='/ToDo' element={<ToDo />} />
@@ -55,7 +56,7 @@ root.render(
                 <Route path='/Game' element={<CanvasGame />} />
                 <Route path='/GameTime' element={<GameTime />} />
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     </React.StrictMode>,
 );
 
