@@ -32,6 +32,8 @@ function GameTime() {
     });
     const [, setTick] = useState(0);
     const [clock, setClock] = useState(new Date());
+    const [isDark, setIsDark] = useState(true);
+    const [showInfo, setShowInfo] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('gametime-students', JSON.stringify(students));
@@ -85,6 +87,10 @@ function GameTime() {
         }));
     };
 
+    const renameStudent = (id: string, name: string) => {
+        setStudents(prev => prev.map(s => s.id === id ? { ...s, name } : s));
+    };
+
     const addToWaitlist = (name: string) => setWaitlist(prev => [...prev, name]);
     const removeFromWaitlist = (index: number) => setWaitlist(prev => prev.filter((_, i) => i !== index));
     const activateFromWaitlist = (name: string, index: number) => {
@@ -94,17 +100,51 @@ function GameTime() {
 
     const activeStudents = students.filter(s => getTimeLeft(s) > 0);
     const timesUpStudents = students.filter(s => getTimeLeft(s) <= 0);
+    const clearAllTimesUp = () => setStudents(prev => prev.filter(s => getTimeLeft(s) > 0));
 
     return (
-        <div data-theme="crc" className="min-h-screen bg-base-100 p-4 flex flex-col gap-4">
+        <div data-theme={isDark ? 'crc' : 'crc-light'} className="min-h-screen bg-base-100 p-4 flex flex-col gap-4">
 
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
                 <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold">Saturday Game Time</h1>
-                <div className="text-xl sm:text-2xl font-mono font-bold tabular-nums">
-                    {clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div className="flex items-center gap-2">
+                    <div className="text-xl sm:text-2xl font-mono font-bold tabular-nums">
+                        {clock.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                    <button
+                        className="btn btn-ghost btn-sm btn-circle text-lg"
+                        title="How to use"
+                        onClick={() => setShowInfo(true)}
+                    >?</button>
+                    <button
+                        className="btn btn-ghost btn-sm btn-circle text-lg"
+                        title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+                        onClick={() => setIsDark(d => !d)}
+                    >{isDark ? '☀️' : '🌙'}</button>
                 </div>
             </div>
+
+            {/* Info modal */}
+            {showInfo && (
+                <div className="modal modal-open">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg mb-3">How to use Saturday Game Time</h3>
+                        <ul className="list-disc list-inside space-y-2 text-sm">
+                            <li>Type a student's name and press <strong>Add</strong> to start their 45-minute timer.</li>
+                            <li>Use <strong>Pause / Resume</strong> on a card to freeze or continue a timer.</li>
+                            <li>Use <strong>Set Time</strong> to manually adjust how much time a student has left.</li>
+                            <li>When a timer hits zero the student moves to the <strong>Time's Up</strong> list — dismiss them individually or clear all at once.</li>
+                            <li>Add students to the <strong>Waitlist</strong> if all computers are in use, then activate them when a spot opens.</li>
+                            <li>Everything is saved automatically — refreshing the page won't lose any data.</li>
+                        </ul>
+                        <div className="modal-action">
+                            <button className="btn btn-primary" onClick={() => setShowInfo(false)}>Got it</button>
+                        </div>
+                    </div>
+                    <div className="modal-backdrop" onClick={() => setShowInfo(false)} />
+                </div>
+            )}
 
             <AddStudent onAdd={addStudent} />
 
@@ -129,6 +169,7 @@ function GameTime() {
                                     onResume={() => resumeStudent(student.id)}
                                     onRemove={() => removeStudent(student.id)}
                                     onSetTime={(ms) => setStudentTime(student.id, ms)}
+                                    onRename={(name) => renameStudent(student.id, name)}
                                 />
                             ))}
                         </div>
@@ -137,7 +178,7 @@ function GameTime() {
 
                 {/* Sidebar — stacks below on mobile, fixed width column on large screens */}
                 <div className="w-full lg:w-72 lg:shrink-0 flex flex-col gap-4">
-                    <TimesUp students={timesUpStudents} onRemove={removeStudent} />
+                    <TimesUp students={timesUpStudents} onRemove={removeStudent} onClearAll={clearAllTimesUp} />
                     <Waitlist waitlist={waitlist} onAdd={addToWaitlist} onRemove={removeFromWaitlist} onActivate={activateFromWaitlist} />
                 </div>
 
